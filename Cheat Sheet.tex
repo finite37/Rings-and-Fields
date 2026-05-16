@@ -1,0 +1,393 @@
+\documentclass[8pt]{extarticle}
+\usepackage{graphicx,blindtext,amsthm,tikz,wrapfig,amssymb,amsmath,xcolor,siunitx,breqn,caption,cancel,esdiff,multicol,multicol,xparse,stmaryrd,hyperref} % Required for inserting images
+\usepackage[a4paper,top=0.5cm, bottom=0.5cm, left=0.5cm, right=0.5cm]{geometry}
+\usetikzlibrary{positioning, arrows.meta}
+
+\setlength{\columnsep}{0.2cm}
+
+
+\DeclareMathOperator{\di}{\;d\!}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\cosech}{csch}
+\DeclareMathOperator{\arsec}{arsec}
+\DeclareMathOperator{\arcot}{arCot}
+\DeclareMathOperator{\arcosech}{arCsc}
+\DeclareMathOperator{\arcosh}{arCosh}
+\DeclareMathOperator{\arsinh}{arsinh}
+\DeclareMathOperator{\artanh}{artanh}
+\DeclareMathOperator{\arsech}{arsech}
+\DeclareMathOperator{\arcsch}{arCsch}
+\DeclareMathOperator{\arcoth}{arCoth}
+
+\setlength{\parindent}{0pt}
+
+% ===== Custom theorem-like environments with decimal numbers =====
+% Paste this whole block into your preamble.
+
+\newcounter{customthm}   % internal counter for cross‑referencing
+\makeatletter
+
+% Helper: define a theorem-like environment.
+% #1 = environment name (e.g. theorem)
+% #2 = printed heading (e.g. Theorem)
+% #3 = style: plain, definition, remark
+\newcommand{\definetheorem}[3]{%
+  \newenvironment{#1}[1]{%
+    \refstepcounter{customthm}%           % unique internal label
+    \renewcommand{\@currentlabel}{##1}%   % store the custom decimal number
+    \par\noindent
+    \ifx#3plain\relax
+      \textbf{#2 ##1.}\ \itshape
+    \else\ifx#3definition\relax
+      \textbf{#2 ##1.}\ \normalfont
+    \else\ifx#3remark\relax
+      \textit{#2 ##1.}\ \normalfont
+    \else
+      \textbf{#2 ##1.}\ \normalfont
+    \fi\fi\fi
+    \ignorespaces
+  }{%
+    \par
+  }%
+}
+
+\makeatother
+
+% Now create the environments you asked for.
+\definetheorem{theorem}{Theorem}{plain}
+\definetheorem{lemma}{Lemma}{plain}
+\definetheorem{proposition}{Proposition}{plain}
+\definetheorem{corollary}{Corollary}{plain}
+\definetheorem{definition}{Definition}{definition}
+\definetheorem{remark}{Remark}{remark}
+
+\newenvironment{example}{%
+  \par\noindent
+  \textbf{Example.}\ \normalfont
+  \ignorespaces
+}{%
+  \par
+}
+
+\begin{document}
+
+    \begin{multicols}{3}
+        
+        \begin{theorem}{1.1}
+            (The Division Theorem for \(\mathbb{Z}\)): \(a,b\in\mathbb{Z}\) with \(b>0\) \(\exists ! q,r\in\mathbb{Z}\) with \(0\le r<b\) s.t. \(a=bq+r\).
+        \end{theorem}
+
+        \begin{proof}
+            (\textit{Existance}):
+            Let \(R=\{a-bm:m\in\mathbb{Z} \;\&\; a-bm\ge0\}\),
+            then as:
+            if \(a\ge0\), \(a-b\cdot 0=a\ge0\) so \(a\in R\);
+            if \(a<0\), \(0=a-b\cdot a=a(1-b)\ge0\) so \(a-b\cdot a\in R\),
+            \(R\ne\varnothing\).
+            Thus, take \(r=\min(R)\) and so \(0<r=a-bm\in R\) for some \(m\in\mathbb{Z}\),
+            choose \(q=m\in\mathbb{Z}\).
+            So by construction \(a=bq+r\).
+            Note, \(r<b\) as were such not true then \(r>a-b(q+1)=r-b\in R\) but this contradicts \(r=\min(R)\), so we have \(0\ge r<b\).
+            (\textit{Uniqueness}):
+            Suppose \(q,q',r,r'\in\mathbb{Z}\) with \(0\le r',r<b\) and \(a=bq+r=bq'+r'\),
+            also WLOG take \(r'\le r\).
+            So with \(\frac{r-r'}b\in(-1,1)\), and \(\frac{r-r'}b=\frac{a-bq-(a-bq')}b=q'-q\in\mathbb{Z}\),
+            we have \(\frac{r-r'}b=0\) i.e. \(r=r'\).
+            So \(q=\frac{a-r}b=\frac{a-r'}b=q'\).
+        \end{proof}
+
+        \textbf{Euclidian Algorithm:}
+
+        Let \(a,b\in\mathbb{Z}^+\), apply Th\textsuperscript{m} 1.1, to give:
+
+        \vspace{-15pt}
+        \begin{align*}
+            a&=bq_1+r_1\\
+            b&=r_1q_2+r_2\\
+            r_1&=r_2q_3+r_3\\
+            &\hspace{5pt}\vdots\\
+            r_{n-1}&=r_nq_{n+1}\text{,}
+        \end{align*}
+        \vspace{-15pt}
+
+        Here, \(\gcd(a,b)=r_n\).
+        To prove this relation \(G(r_{i},r_{i+1})=G(r_{i+1},r_{i+2})\), where \(G(a,b)=\{n\in\mathbb{Z}:n|a\;\&\;n|b\}\).
+
+        \textbf{Reverse Euclid:}
+
+        Given a completed algorithm we can obtain \(n,m\in\mathbb{Z}\) s.t. \(na+mb=\gcd(a,b)\) i.e. taking the end of a Euclidian algroithm:
+
+        \vspace{-15pt}
+        \begin{align}
+            &\hspace{5pt}\vdots\\
+            r_{n-3}&=r_{n-2}q_{n-1}+r_{n-1} \label{n-1 step}\\
+            r_{n-2}&=r_{n-1}q_{n}+r_{n} \label{n step}\\
+            r_{n-1}&=r_{n}q_{n+1}\nonumber
+        \end{align}
+        \vspace{-15pt}
+
+        we have:
+
+        \vspace{-15pt}
+        \begin{align}
+            \text{(\ref{n step})}\implies r_{n}&=r_{n-2}-r_{n-1}q_{n} \label{1st equate}\\
+            \text{(\ref{n-1 step})}\implies r_{n-1}&=r_{n-3}-r_{n-2}q_{n-1} \label{2nd equate}\\
+            \text{(\ref{1st equate}) and (\ref{2nd equate})}\implies r_{n}&=\begin{aligned}[t]&r_{n-2}-\\&(r_{n-3}-r_{n-2}q_{n-1})q_{n-1}\end{aligned} \nonumber\\
+            \vdots\nonumber
+        \end{align}
+        \vspace{-15pt}
+
+        we continue this ladder up, simplifying each time,
+        {\footnotesize (Note: \(r_{n}=\gcd(a,b)\))}
+
+        \begin{theorem}{1.9}
+            Every integer \(n\ge2\) can be written as a product of primes.
+        \end{theorem}
+
+        \begin{proof}
+            (\textit{By strong induction}):
+
+            (\textit{Base case}, \(n=2\)): Trivially true, \(n=2\) a product of times.
+
+            (\textit{Inductive Hypothesis}): Suppose for \(n\in{1,2,\ldots,k}\) \(n=p_{n,1}p_{n,2}\cdots p_{n,m_n}\).
+            
+            Then for \(n=k+1\), if \(k+1\) is prime we are done, if not then \(k+1=ab\) where \(a,b\in\{2,3,\ldots,k\}\), thus \(a=p_{a,1}p_{a,2}\cdots p_{a,m_a}\) and \(b=p_{b,1}p_{b,2}\cdots p_{b,m_b}\) so: \(k+1=p_{a,1}p_{a,2}\cdots p_{a,m_a}p_{b,1}p_{b,2}\cdots p_{b,m_b}\).
+
+            So \(\forall 2<n\in\mathbb{N}\) we are done.
+
+        \end{proof}
+
+        \begin{theorem}{1.10}
+            (Euclid's property of primes) \(\forall p\in \text{Primes}\) \& \(\forall a,b\in\mathbb{Z}\). \(p|ab\implies p|a\text{ or } p|b\).
+        \end{theorem}
+
+        \begin{proof}
+            (\textit{Case \(p|a\)}): We are done.
+
+            (\textit{Case \(p\nmid a\)}): Then using the Euclidian algorithm we obtain: \(1=na-mp\) with \(n,m\in\mathbb{Z}\).
+            So \(p|b\Longleftrightarrow p|(na-mp)b\Longleftrightarrow p|n(ab)-mbp\impliedby p|ab\).
+        \end{proof}
+
+        {\footnotesize the chain of implications uses a proposition in the notes which states: \(p|a\;\&\;p|b\implies p|a+b\;\&\;p|ab\)}.
+
+        \begin{theorem}{1.12}
+            (Fundamental Theorem of Arithmetic) \(\forall 2<n\in\mathbb{N},\exists! p_1,p_2,...,p_r\in\text{Primes}\) up to ordering, s.t.: \(n=p_1p_2\cdots p_r\).
+        \end{theorem}
+
+        \begin{proof}
+            The existance is from Th\textsuperscript{m} 1.9. For uniqueness, suppose \(p_1p_2\cdots p_r=q_1q_2\cdots q_s\), then cancel common primes, suppose the result is not \(1\) i.e. we are left with \(p_1p_2\cdots p_n=q_1q_2\cdots q_m\) with \(p_i\ne q_j\),\(\forall i\in\{1,\ldots,n\}\) and \(\forall j\in\{1,\ldots,m\}\), after reindexing. Then \(p_1|q_1q_2\cdots q_m\) so \(\exists j\in\{1,\ldots,m\}\)\(p_1|q_j\), but \(q_j\) is prime so \(p_1=q_j\), \(\lightning\).
+        \end{proof}
+
+        \begin{lemma}{1.16}
+            \(\forall a,b\in R\): \(0a=a0=0\); \(a(-b)=(-a)b=-(ab)\); \& \((-a)(-b)=ab\)
+        \end{lemma}
+
+        \begin{proof}
+            \(0a+0=0a=(0+0)a=0a+0a\) so \(0a=0\).
+            
+            \(ab+a(-b)=a(b-b)=a0=0=(a-a)b=ab+(-a)b\) so by the Groups and Geo\textsuperscript{m} we have \(-(ab)\) is the unique element s.t. \(ab-(ab)=0\), \(a(-b)=-(ab)=(-a)b\).
+
+            \((-a)(-b)=-(a(-b))=-(-(ab))=ab\).
+        \end{proof}
+
+        \begin{lemma}{1.18}
+            (Subring Test) Let \(R\) be a ring and \(S\subseteq R\). Then \(S\) is a subring of \(R\) iff the following hold, \(\forall r,s\in S\):
+
+            \vspace{-10pt}
+            \begin{enumerate}
+                \item \(1_R\in S\),
+                \vspace{-10pt}
+                \item \(r+s,rs\in S\), and 
+                \vspace{-10pt}
+                \item \(-r\in S\).
+            \end{enumerate}
+            \vspace{-10pt}
+        \end{lemma}
+
+        \begin{proof}
+            By 1 and 3 we have \(-1_R\in S\) so \(0_R=1_R-1_R\in S\) by 2. So \((S,+)\) is a group by the subgroup test with \((R,+)\).
+            Commutativity of \(+\), associativity of \(+\) and \(\times\), and distributivity of \(\times\) over \(+\) are all inheritited from \(R\).
+            Note, as they shair operations they shair the identities of the operations, so as, \(0_R\ne1_R\) in \(R\) we have \(0_S=0_R\ne 1_R=1_S\) in \(S\), so (R1)-(R4) are satisfied.
+        \end{proof}
+
+        \begin{lemma}{2.2}
+            Suppose \(Char(R)=n>0\), then: (i) \(n\cdot r=0, \forall r\in R\); \& (ii) if \(m\in\mathbb{Z}^+\) then \(m\cdot 1=0\) iff \(n|m\).
+        \end{lemma}
+        
+
+        \begin{proof}
+            (i):
+
+            \vspace{-15pt}
+            \begin{align*}
+                n\cdot r&=\underbrace{r+r+\cdots+r}_{n\text{ times}}\\
+                &=r(\underbrace{1+1+\cdots+1}_{n\text{ times}})=r0=0
+            \end{align*}
+            \vspace{-10pt}
+
+            (ii): (\(\implies\)): Let \(m\cdot 1=0\) with \(m\in\mathbb{Z}^+\), applying the division Th\textsubscript{m} with \(m=nq+r\) where \(q,r\in\mathbb{Z}\) and \(0\le r<n\) so \(0=m\cdot1=(nq+r)\cdot1=q(n\cdot1)+r\cdot1=q\cdot0+r\cdot1=r\cdot1\), so \(r=0\) as otherwise \(n>r\in\mathbb{Z}^+\) and \(r\cdot 1=0\), a \(\lightning\) of \(n\)'s def\textsuperscript{n}.
+
+            (\(impliedby\)): Let \(n|m\) i.e. \(\exists q\in\mathbb{Z}\) s.t. \(m=qn\), so \(m\cdot1=qn\cdot1=q(n\cdot1)=q\cdot0=0\).
+        \end{proof}
+
+
+        \begin{lemma}{2.5}
+            If \(S\) is a subring of \(R\) and \(R\) is a domain then \(S\) is a domain.
+        \end{lemma}
+
+        \begin{proof}
+            Let \(r,s\in S\) with \(rs=0\), thus \(rs=0\) in \(R\), hence \(r=0\) or \(s=0\).
+        \end{proof}
+
+        \begin{proposition}{2.7}
+            Suppose \(R\) is a domain. Then \(R[X]\) is a domain.
+        \end{proposition}
+
+        \begin{proof}
+            We use the contrapositive of the definition of a domain [i.e.:\(R\) a domain iff \(\forall 0\ne r,s\in R, rs\ne 0\)]. Let \(0\ne f,g\in R[X]\), taking the leading coefficients of \(f\) \& \(g\) as \(a\ne0\) and \(b\ne0\), respectively, we the leading coefficent of \(fg\) as \(ab\ne0\), hence \(fg\ne0\).
+        \end{proof}
+
+        {\footnotesize Note: This immediately (by induction on \(n\)) yields \(R[X_1,\ldots,X_n]\) and domain if \(R\) is a domain.}
+
+        \begin{lemma}{2.11}
+            If \(R\) is a ring and \(r\in R\) has both a left and right inverse then these equal and unique.
+        \end{lemma}
+
+        \begin{proof}
+            (Equal): Choose, \(rs=1=tr\), then: \(s=1s=trs=t1=t\).
+
+            (Unique right inverse): Let \(rs=1=rs'\) then \(s=1s=trs=t1=trs'=1s'=s'\), where t is choosen s.t. \(tr=0\).
+
+            (Unique left inverse): Let \(tr=t'r\) then \(t=t1=trs=1s=t'rs=t'1=t'\), where s is choosen s.t. \(rs=0\)
+        \end{proof}
+
+        \begin{tikzpicture}
+            \node (Ring) at (0,0) {Ring};
+            \node (Domain) at (0,-2) {Domain};
+            \node (Integral Domain) at (4,-2) {Integral Domain};
+            \node (Division Ring) at (0,-4) {Division Ring};
+            \node (Field) at (4,-4) {Field};
+
+            \draw[->] (Ring) -- (Domain) node[midway, above, sloped] {\(\supseteq\)};
+            \draw[->] (Domain) -- (Integral Domain) node[midway, above, sloped] {\(\supseteq\)};
+            \draw[->] (Domain) -- (Division Ring) node[midway, above, sloped] {\(\supseteq\)};
+            \draw[->] (Division Ring) -- (Field) node[midway, above, sloped] {\(\supseteq\)};
+            \draw[->] (Integral Domain) -- (Field) node[midway, above, sloped] {\(\supseteq\)};
+
+            \draw[loosely dotted] (2,0.25) node[right]{Commutativity} -- (2,-4.25);
+            
+        \end{tikzpicture}
+
+        \newpage
+
+        \begin{definition}{1.4}
+            \(\forall a,b\in\mathbb{Z}\), \(\gcd(a,b)=\max\{n\in\mathbb{Z}:n|a\;\&\;n|b\}\), noting \(\gcd(0,0)=0\) and if \(\gcd(a,b)=1\) then \(a\) and \(b\) are coprime.
+        \end{definition}
+
+        \begin{definition}{1.6}
+            \(\forall a,b,c\in\mathbb{Z}\) with \(n\ge2\).
+            \(a\) is \textbf{congruent to} \(b\) \textbf{modulo} \(n\) iff \(n|a-b\), written \(a\equiv b\mod n\).Then define the congruence class of \(a\) w.r.t. \(n\) as: \([a]_n=\{b\in\mathbb{Z}b\equiv a\mod n\}=\{b\in\mathbb{Z}:b|m-a\}\)
+            
+            We thus have: 
+            
+            \vspace{-15pt}
+            \[\mathbb{Z}_n=\{[a]_n:a\in\mathbb{Z}\}=\{[0]_n,[1]_n,[2]_n,\ldots,[n-1]_n\}\]
+            \vspace{-15pt}
+
+            {\footnotesize Note: \(b\equiv a \mod n\) iff \(b=a+kn\) iff \([a]_n=\{a+nk:k\in\mathbb{Z}\}\) iff \([a]_n=[a+kn]_n\)}
+        \end{definition}
+
+        \begin{definition}{1.14}
+            A \textbf{ring} is a set \(R\) with two binary operations \(+\) \& \(\times\), defined on \(R\), satisfying the following:
+
+            (R1) \((R,+)\) is an abelian group with identity 0.
+
+            (R2) \(\times\) is associative.
+
+            (R3) \(\times\) distributes over \(+\) i.e.:
+
+            \vspace{-15pt}
+            \[a(b+c)=ab+ac,\;\&\;(a+b)c=ac+bc,\forall a,b,c\in R\]
+            \vspace{-15pt}
+
+            (R4) The multiplicative identity \(1\in R\) and \(1\ne0\)
+
+
+        \end{definition}
+
+        \begin{example}
+            \(M_n(R)\) is the ring of \(n\times n\) matrices, a non-commutative ring.
+            {\footnotesize Note: the only ideals of \(M_n(R)\) are \(M_n(R)\) and \(\{\mathbf{0}\}\) but this isn't a division ring hence even relaxing commutative in Pro\textsuperscript{p} 3.22 doesn't yeild the same pro\textsuperscript{p} with field \(\to\) division ring.}
+        \end{example}
+
+        \begin{example}
+            For \(X\) a set \(\mathcal{P}(X)\) with
+            
+            \vspace{-15pt}
+            \[A+B=(A\cup B)\backslash(A\cap B),\qquad AB=A\cap B\]
+            \vspace{-15pt}
+
+            and \(0=\varnothing\), \(-A=A\), \(A,B\in\mathcal{P}(X)\).
+        \end{example}
+
+        \begin{definition}{1.17}
+            Let \(R\) be a ring and \(S\subseteq R\). Then \(S\) is a \textbf{subring} of \(R\) if \(S\) is a ring w.r.t. the same addition and multiplication as \(R\) and contains the multiplicative identity of \(R\), \(1_R\).
+        \end{definition}
+
+        \begin{definition}{1.21}
+            let \(R\) be a ring. The \textbf{ring of polynomials} \(R[X]=\{\sum_{i\ge0}^na_iX^i\text{a finite sum}:a_i\in R\) with addition and multiplication defined as:
+            
+            \(\sum_{i\ge0}^na_iX^i+\sum_{i\ge0}^mb_iX^i=\sum_{i\ge0}^n(a_i+b_i)X^i\)
+            
+            \&
+            
+            \(\big(\sum\limits_{i\ge0}^na_iX^i)(\sum\limits_{i\ge0}^mb_iX^i)=\sum\limits_{i\ge0}^{n+m}(\sum\limits_{j=0}^ia_{j}b_{i-j})X^i\)
+            
+            \(0=\sum_{i\ge0}0X^i\) \& \(1=1X^0+\sum_{i\ge1}0X^i\). Then the \textbf{degree} of a polynomial is \(i\in\mathbb{N}\cup\{0\}\) s.t. \(a_i\ne0\) and \(\deg(0)=-\infty\)
+
+            More genearlly, we have:
+            
+            \vspace{-10pt}
+            \[R[X_1,\ldots,X_n]=R[X_1,\ldots,X_{n-1}][X_n]\]
+            \vspace{-15pt}
+
+            {\footnotesize \(\forall f,g\in R[X]\), \(\deg(f+g)\le\max(\deg(f),\deg(g))\)} and \(\deg(fg)\le\deg(f)+\deg(g)\).
+        \end{definition}
+
+        \begin{definition}{1.24}
+            If \(R_1\) and \(R_2\) are rings then the \textbf{Cartesian product} \(R_1\times R_2\) with the \(+\) and \(\times\) defined element wise is a ring.
+        \end{definition}
+
+        \begin{definition}{2.1}
+            For \(a\in R\) define: for \(n\in\mathbb{Z}^+\), \(n\cdot a=\underbrace{a+a+\cdots+a}_{n\text{ times}}\); for \(n=0\), \(n\cdot a=0\cdot a=0\); \& for \(n\in\mathbb{Z}^-\), \(n\cdot a=(-n)\cdot(-a)\).
+            
+            The \textbf{Characteristic}, \(\text{char}(R)\), of a ring \(R\) is the least posititve integer \(n\) s.t. \(n\cdot 1=0\).
+            
+            {\footnotesize Note: \((n+m)\cdot a=n\cdot a+m\cdot a\), \(n\cdot(a+b)=n\cdot a+n\cdot b\), \& \(n\cdot(m\cdot a)=(nm)\cdot a\), all easily verifiable.}
+        \end{definition}
+
+        \begin{definition}{2.3}
+            A non-zero element \(r\in R\) is a \textbf{zero-divisor} if \(\exists s\in R\) a non-zero element s.t. \(rs=0\) or \(sr=0\).
+
+            A ring \(R\) is a domain if, \(\forall r,s\in R\):
+
+            \vspace{-10pt}
+            \[rs=0\implies r=0 \text{ or } s=0.\]
+            \vspace{-15pt}
+
+            i.e. a ring with no zero divisors is a domain and vice versa.
+        \end{definition}
+
+        \begin{definition}{2.9}
+            A \textbf{division ring} is a ring where every non-zero element has a right and left inverse, i.e.: \(\forall r\in R,\exists s,t\in R\text{ s.t. }rs=1=tr\) with \(s\),\(t\) being the right and left inverses, respectively.
+
+            {\footnotesize Note: this immediately collapse, due to Le\textsuperscript{m} 2.11, to just there exists an inverse as \(s=t\).}
+            
+            An \textbf{invertible} element \(r\) is called a \textbf{unit}.
+        \end{definition}
+
+        \newpage
+
+    \end{multicols}
+
+\end{document}
