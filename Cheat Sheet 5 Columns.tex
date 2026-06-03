@@ -20,6 +20,25 @@
 \DeclareMathOperator{\arcoth}{arCoth}
 
 \setlength{\parindent}{0pt}
+\setlength{\abovedisplayskip}{1pt}
+\setlength{\belowdisplayskip}{1pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{1pt}
+\setlength{\jot}{1pt}
+
+\newsavebox{\fitdisplaybox}
+\newcommand{\fitdisplay}[1]{%
+  \par\vspace{-1pt}\noindent
+  \sbox{\fitdisplaybox}{#1}%
+  \makebox[\columnwidth][c]{%
+    \ifdim\wd\fitdisplaybox>\columnwidth
+      \resizebox{\columnwidth}{!}{#1}%
+    \else
+      \usebox{\fitdisplaybox}%
+    \fi
+  }%
+  \par\vspace{-1pt}%
+}
 
 % ===== Custom theorem-like environments with decimal numbers =====
 % Paste this whole block into your preamble.
@@ -84,11 +103,12 @@
 \makeatother
 
 \begin{document}
+\fontsize{6}{7}\selectfont
 
-    \begin{multicols}{3}
+    \begin{multicols}{5}
     \raggedright
 
-        {\centering\fontsize{10.4}{11}\selectfont\textbf{Proofs}\par}
+        {\centering\fontsize{7.8}{8.5}\selectfont\textbf{Proofs}\par}
         \vspace{2pt}
         
         \begin{theorem}{1.1}
@@ -118,15 +138,13 @@
 
         Let \(a,b\in\mathbb{Z}^+\), apply Th\textsuperscript{m} 1.1, to give:
 
-        \vspace{-15pt}
-        \begin{align*}
+        \fitdisplay{\(\begin{aligned}
             a&=bq_1+r_1\\
             b&=r_1q_2+r_2\\
             r_1&=r_2q_3+r_3\\
             &\hspace{5pt}\vdots\\
             r_{n-1}&=r_nq_{n+1}\text{,}
-        \end{align*}
-        \vspace{-15pt}
+        \end{aligned}\)}
 
         Here, \(\gcd(a,b)=r_n\).
         To prove this relation \(G(r_{i},r_{i+1})=G(r_{i+1},r_{i+2})\), where \(G(a,b)=\{n\in\mathbb{Z}:n|a\;\&\;n|b\}\).
@@ -135,25 +153,21 @@
 
         Given a completed algorithm we can obtain \(n,m\in\mathbb{Z}\) s.t. \(na+mb=\gcd(a,b)\) i.e. taking the end of a Euclidian algroithm:
 
-        \vspace{-15pt}
-        \begin{align}
+        \fitdisplay{\(\begin{aligned}
             &\hspace{5pt}\vdots\\
-            r_{n-3}&=r_{n-2}q_{n-1}+r_{n-1} \label{n-1 step}\\
-            r_{n-2}&=r_{n-1}q_{n}+r_{n} \label{n step}\\
-            r_{n-1}&=r_{n}q_{n+1}\nonumber
-        \end{align}
-        \vspace{-15pt}
+            r_{n-3}&=r_{n-2}q_{n-1}+r_{n-1}\quad(1)\\
+            r_{n-2}&=r_{n-1}q_{n}+r_{n}\quad(2)\\
+            r_{n-1}&=r_{n}q_{n+1}
+        \end{aligned}\)}
 
         we have:
 
-        \vspace{-15pt}
-        \begin{align}
-            \text{(\ref{n step})}\implies r_{n}&=r_{n-2}-r_{n-1}q_{n} \label{1st equate}\\
-            \text{(\ref{n-1 step})}\implies r_{n-1}&=r_{n-3}-r_{n-2}q_{n-1} \label{2nd equate}\\
-            \text{(\ref{1st equate}) \& (\ref{2nd equate})}\implies r_{n}&=\begin{aligned}[t]&r_{n-2}-\\&(r_{n-3}-r_{n-2}q_{n-1})q_{n}\end{aligned} \nonumber\\
-            \vdots\nonumber
-        \end{align}
-        \vspace{-15pt}
+        \fitdisplay{\(\begin{aligned}
+            \text{(2)}\Rightarrow r_n&=r_{n-2}-r_{n-1}q_n\quad(3)\\
+            \text{(1)}\Rightarrow r_{n-1}&=r_{n-3}-r_{n-2}q_{n-1}\quad(4)\\
+            \text{(3) \& (4)}\Rightarrow r_n&=r_{n-2}-(r_{n-3}-r_{n-2}q_{n-1})q_n\\
+            &\hspace{5pt}\vdots
+        \end{aligned}\)}
 
         we continue this ladder up, simplifying each time,
         {\footnotesize (Note: \(r_{n}=\gcd(a,b)\))}
@@ -324,10 +338,12 @@
 
         \end{proof}
 
-        \begin{center}
+        \vspace{-2pt}
+        \noindent\makebox[\columnwidth][c]{%
+            \resizebox{\columnwidth}{!}{%
             \begin{tikzpicture}
                 \node (Ring) at (0,0) {Ring};
-                \node (Domain) at (0,-2) {Domain};
+                \node (Domain) at (0,-2){Domain};
                 \node[align=center] (Integral Domain) at (4,-2) {Integral\\ Domain};
                 \node[align=center] (Division Ring) at (0,-4) {Division\\ Ring};
                 \node (Field) at (4,-4) {Field};
@@ -347,7 +363,9 @@
                 \fill[green, opacity=0.15] (-1.4,-3) rectangle (4.7,-4.5);
                 
             \end{tikzpicture}
-        \end{center}
+            }
+        }
+        \vspace{-1pt}
 
         \begin{lemma}{3.3}
             Suppose \(\varphi:R\to S\) is an isomorphism. Then: (i) \(\varphi(1_R)=1_S\); (ii) \(\varphi(0_R)=0_S\); (iii) \(\varphi(-r)=-\varphi(r)\), \(\forall r\in R\); (iv) \(r\in R\) is invertible iff \(\varphi(r)\in S\) is invertible and, in that case, \((\varphi(r))^{-1}=\varphi(r^{-1})\); (v) \(r\in R\) is nilpotent iff \(\varphi(r)\) is nilpotent and, in that case, they have the same index of nilpotence.
@@ -365,8 +383,8 @@
             (v): Since \((\varphi(r))^n=\varphi(r^n)\), \(r^n=0_R\) iff \((\varphi(r))^n=0_S\). Thus the least such \(n\) is the same.
         \end{proof}
 
-        \vspace{-6pt}
-        {\centering\fontsize{10.4}{11}\selectfont\textbf{Definitions}\par}
+        \vspace{2pt}
+        {\centering\fontsize{7.8}{8.5}\selectfont\textbf{Definitions}\par}
         \vspace{2pt}
 
         \begin{definition}{1.4}
@@ -379,9 +397,7 @@
             
             We thus have: 
             
-            \vspace{-15pt}
-            \[\mathbb{Z}_n=\{[a]_n:a\in\mathbb{Z}\}=\{[0]_n,[1]_n,[2]_n,\ldots,[n-1]_n\}\]
-            \vspace{-15pt}
+            \fitdisplay{\(\mathbb{Z}_n=\{[a]_n:a\in\mathbb{Z}\}=\{[0]_n,[1]_n,\ldots,[n-1]_n\}\)}
 
             {\footnotesize Note: \(b\equiv a \mod n\) iff \(b=a+kn\) iff \([a]_n=\{a+nk:k\in\mathbb{Z}\}\) iff \([a]_n=[a+kn]_n\)}
         \end{definition}
@@ -395,9 +411,7 @@
 
             (R3) \(\times\) distributes over \(+\) i.e.:
 
-            \vspace{-15pt}
-            \[a(b+c)=ab+ac,\;\&\;(a+b)c=ac+bc,\forall a,b,c\in R\]
-            \vspace{-15pt}
+            \fitdisplay{\(\begin{aligned}a(b+c)&=ab+ac,\\(a+b)c&=ac+bc,\quad \forall a,b,c\in R\end{aligned}\)}
 
             (R4) The multiplicative identity \(1\in R\) \& \(1\ne0\)
 
@@ -412,9 +426,7 @@
         \begin{example}
             For \(X\) a set \(\mathcal{P}(X)\) with
             
-            \vspace{-15pt}
-            \[A+B=(A\cup B)\setminus(A\cap B),\qquad AB=A\cap B\]
-            \vspace{-15pt}
+            \fitdisplay{\(\begin{aligned}A+B&=(A\cup B)\setminus(A\cap B),\\ AB&=A\cap B\end{aligned}\)}
 
             \& \(0=\varnothing\), \(-A=A\), \(A,B\in\mathcal{P}(X)\).
         \end{example}
@@ -436,9 +448,7 @@
 
             More genearlly, we have:
             
-            \vspace{-10pt}
-            \[R[X_1,\ldots,X_n]=R[X_1,\ldots,X_{n-1}][X_n]\]
-            \vspace{-15pt}
+            \fitdisplay{\(R[X_1,\ldots,X_n]=R[X_1,\ldots,X_{n-1}][X_n]\)}
 
             {\footnotesize \(\forall f,g\in R[X]\), \(\deg(f+g)\le\max(\deg(f),\deg(g))\)} \& \(\deg(fg)\le\deg(f)+\deg(g)\).
         \end{definition}
@@ -460,9 +470,7 @@
 
             A ring \(R\) is a domain if, \(\forall r,s\in R\):
 
-            \vspace{-10pt}
-            \[rs=0\implies r=0 \text{ or } s=0.\]
-            \vspace{-15pt}
+            \fitdisplay{\(rs=0\implies r=0 \text{ or } s=0.\)}
 
             i.e. a ring with no zero divisors is a domain \& vice versa.
         \end{definition}
@@ -490,9 +498,7 @@
         \begin{definition}{3.1}
             If \(R\) \& \(S\) are rings then an \textbf{isomorphism} from \(R\) to \(S\) is a bijection \(\varphi:R\to S\) s.t. \(\forall r,r'\in R\):
 
-            \vspace{-15pt}
-            \[\varphi(r+r')=\varphi(r)+\varphi(r')\quad\&\quad\varphi(rr')=\varphi(r)\varphi(r').\]
-            \vspace{-15pt}
+            \fitdisplay{\(\begin{aligned}\varphi(r+r')&=\varphi(r)+\varphi(r'),\\ \varphi(rr')&=\varphi(r)\varphi(r')\end{aligned}\)}
 
             If \(\varphi\) is an isomorphism from \(R\) to \(S\) then \(R\) \& \(S\) are \textbf{isomorphic}, written \(R\cong S\).
         \end{definition}
