@@ -189,41 +189,24 @@
 
         \textbf{Reverse Euclid:}
 
-        Given a completed algorithm we can obtain \(n,m\in\mathbb{Z}\) s.t. \(na+mb=\gcd(a,b)\) i.e. taking the end of a Euclidian algroithm:
+        Given a completed algorithm we can obtain \(n,m\in\mathbb{Z}\) s.t. \(na+mb=\gcd(a,b)\) i.e. taking the start of a Euclidian algorithm:
 
-        \fitdisplay{\(\begin{aligned}
-            &\hspace{5pt}\vdots\\
-            r_{n-3}&=r_{n-2}q_{n-1}+r_{n-1}\quad(1)\\
-            r_{n-2}&=r_{n-1}q_{n}+r_{n}\quad(2)\\
-            r_{n-1}&=r_{n}q_{n+1}
-        \end{aligned}\)}
+        \fitdisplay{\(\begin{alignedat}{3}
+            a&=q_1b+r_1\quad &&\Rightarrow\quad r_1&&=a-q_1b\\
+            b&=q_2r_1+r_2 &&\Rightarrow r_2&&=b-q_2r_1\\
+             &&&&&=b-q_2(a-q_1b)\\
+             &&&&&=-q_2a+(1+q_1q_2)b\\
+            r_1&=q_3r_2+r_3 &&\Rightarrow r_3&&=r_1-q_3r_2\\
+             &&&&&=(a-q_1b)\\
+             &&&&&\quad -q_3(-q_2a+(1+q_1q_2)b)\\
+             &&&&&=(1+q_2q_3)a\\
+             &&&&&\quad -(q_1+q_3+q_1q_2q_3)b\\
+            &\hspace{5pt}\vdots &&& &\hspace{5pt}\vdots
+        \end{alignedat}\)}
 
-        we have:
-
-        From (2) and (1):
-        \vspace{-6pt}
-        \[
-        \begin{aligned}
-            r_n&=r_{n-2}-r_{n-1}q_n\quad(3)\\
-            r_{n-1}&=r_{n-3}-r_{n-2}q_{n-1}\quad(4)
-        \end{aligned}
-        \]
-        \vspace{-8pt}
-
-        From (3) and (4):
-        \vspace{-6pt}
-        \[
-        \begin{aligned}
-            r_n&=r_{n-2}-r_{n-1}q_n\\
-            &=r_{n-2}\\
-            &\quad -(r_{n-3}-r_{n-2}q_{n-1})q_n\\
-            &\hspace{5pt}\vdots
-        \end{aligned}
-        \]
-        \vspace{-8pt}
-
-        we continue this ladder up, simplifying each time,
-        {\footnotesize (Note: \(r_{n}=\gcd(a,b)\))}
+        Continue substituting until only \(a,b\) remain:
+        {\centering\scriptsize \(r_n=\gcd(a,b)=na+mb,\quad n,m\in\mathbb{Z}.\)\par}
+        \vspace{2pt}
 
         \begin{theorem}{1.9}
             Every integer \(n\ge2\) can be written as a product of primes.
@@ -464,6 +447,14 @@
         \begin{lemma}{4.2}
             (i) The operations \(+\) and \(\times\) on \(R/I\) are well-defined, i.e. if \(r+I=r'+I\) and \(s+I=s'+I\), then \((r+s)+I=(r'+s')+I\) and \(rs+I=r's'+I\). (ii) With these operations, \(R/I\) forms a ring. The zero element is \(0+I(=I)\), the identity is \(1+I\), and \(-(r+I)=(-r)+I\). If \(r^{-1}\) exists in \(R\), then \(r+I\) is invertible in \(R/I\) with inverse \(r^{-1}+I\).
         \end{lemma}
+
+        \begin{proof}
+            For well-definedness of \(+\) and \(\times\), suppose \(r+I=r'+I\) and \(s+I=s'+I\). Then \(r-r'\in I\) and \(s-s'\in I\). Hence
+            \fitdisplay{\((r+s)-(r'+s')=(r-r')+(s-s')\in I,\)}
+            so \((r+s)+I=(r'+s')+I\). Also, since \(I\lhd R\),
+            \fitdisplay{\(rs-r's'=(r-r')s+r'(s-s')\in I,\)}
+            hence \(rs+I=r's'+I\). Thus both operations are independent of the chosen representatives.
+        \end{proof}
 
         \begin{lemma}{4.4}
             Let \(I\) be a proper ideal of \(R\). (i) The map \(\pi:R\to R/I\), \(\pi(r)=r+I\), is a surjective ring homomorphism with kernel \(I\). (ii) Let \(\vartheta:R\to S\) be a homomorphism with \(I\subseteq\ker(\vartheta)\). There is an induced homomorphism \(\vartheta':R/I\to S\) with \(\vartheta'\circ\pi=\vartheta\).
